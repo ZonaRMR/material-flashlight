@@ -85,7 +85,7 @@ class ModeService : Service() {
 
         mCurrentMode?.stop()
 
-        mModuleManager.stop()
+        if(mModuleManager.isRunning()) mModuleManager.stop()
 
         stopForeground(true)
         stopSelf()
