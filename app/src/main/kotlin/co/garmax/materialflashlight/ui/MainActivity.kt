@@ -183,8 +183,9 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     private fun changeModule(module: Int) {
         val isRunning = mModuleManager.isRunning()
 
-        // Stop previous module
-        if (isRunning) turnOff()
+        if (isRunning) {
+            mModuleManager.stop()
+        }
 
         mPreferences.module = module
 
@@ -196,16 +197,16 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
             throw IllegalArgumentException("Unknown module type " + module)
         }
 
-        // Turn on if was running
-        if (isRunning) turnOn()
+        // Try ti turn on if was running and turn off if can't do that
+        if (isRunning && !turnOn()) turnOff()
     }
 
     private fun turnOff() {
         ModeService.setMode(this, ModeBase.MODE_OFF)
     }
 
-    private fun turnOn() {
-        // Show toast using app context
+    private fun turnOn() : Boolean {
+        // Show warning if module not supported
         if (!mModuleManager.isSupported()) {
             Toast.makeText(applicationContext, R.string.toast_module_not_supported, Toast.LENGTH_LONG).show()
 
@@ -217,14 +218,18 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         } else {
 
             // Exit if we don't have permission for the module
-            if (!mModuleManager.checkPermissions(RC_MODULE_PERMISSIONS, this)) return
+            if (!mModuleManager.checkPermissions(RC_MODULE_PERMISSIONS, this)) return false
 
             // Exit if we don't have permission for sound strobe mode
             if (mPreferences.mode == ModeBase.MODE_SOUND_STROBE &&
-                    !SoundStrobeMode.checkPermissions(RC_MODE_PERMISSIONS, this)) return
+                    !SoundStrobeMode.checkPermissions(RC_MODE_PERMISSIONS, this)) return false
 
             ModeService.setMode(this, mPreferences.mode)
+
+            return true
         }
+
+        return false;
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
