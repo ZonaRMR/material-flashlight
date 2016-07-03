@@ -8,7 +8,10 @@ import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SwitchCompat
 import android.view.View
-import android.widget.*
+import android.widget.CompoundButton
+import android.widget.ImageView
+import android.widget.RadioButton
+import android.widget.TextView
 import butterknife.Bind
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -26,7 +29,7 @@ import co.garmax.materialflashlight.modules.ScreenModule
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener,
-        ModuleManager.OnLightStateChangedListener {
+        ModuleManager.OnStateChangedListener {
 
     @Bind(R.id.image_appbar)
     lateinit var mImageAppbar: ImageView
@@ -71,16 +74,22 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
 
         setupLayout()
 
-        mModuleManager.setOnLightStateChangedListener(this)
+        mModuleManager.addOnStateChangedListener(this)
 
         // Handle auto turn on
         if (savedInstanceState == null && mPreferences.isAutoTurnOn) {
-            turnOn()
+            start()
         }
         // Restore state on recreation
         else {
             setState(mModuleManager.isRunning(), false)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mModuleManager.removeOnStateChangedListener(this@MainActivity)
     }
 
     private fun setupLayout() {
@@ -122,8 +131,8 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         mTextVersion.text = getString(R.string.text_version, BuildConfig.VERSION_NAME)
     }
 
-    override fun stateChanged(turnedOn: Boolean) {
-        setState(turnedOn, true)
+    override fun stateChanged(isRunning: Boolean) {
+        setState(isRunning, true)
     }
 
     private fun setState(turnedOn: Boolean, animated: Boolean) {
@@ -131,7 +140,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
                 {
                     if (turnedOn) {
                         // Fab image
-                        mFab.setImageResource(R.drawable.ic_power_on);
+                        mFab.setImageResource(R.drawable.ic_power_on)
 
                         // Appbar image
                         if (animated) {
@@ -142,7 +151,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
                         }
                     } else {
                         // Fab image
-                        mFab.setImageResource(R.drawable.ic_power_off);
+                        mFab.setImageResource(R.drawable.ic_power_off)
 
                         // Appbar image
                         if (animated) {
@@ -164,11 +173,11 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
 
                 // Turn off light
                 if (mModuleManager.isRunning()) {
-                    turnOff()
+                    stop()
                 }
                 // Turn on light
                 else {
-                    turnOn()
+                    start()
                 }
             }
 
@@ -190,46 +199,40 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         mPreferences.module = module
 
         if (module == ModuleBase.MODULE_CAMERA_FLASHLIGHT) {
-            mModuleManager.module = FlashModule(this);
+            mModuleManager.module = FlashModule(this)
         } else if (module == ModuleBase.MODULE_SCREEN) {
-            mModuleManager.module = ScreenModule(this);
+            mModuleManager.module = ScreenModule(this)
         } else {
             throw IllegalArgumentException("Unknown module type " + module)
         }
 
-        // Try ti turn on if was running and turn off if can't do that
-        if (isRunning && !turnOn()) turnOff()
+        // Try to turn on if was running and turn off if can't do that
+        if (isRunning && !start()) stop()
     }
 
-    private fun turnOff() {
+    private fun stop() {
         ModeService.setMode(this, ModeBase.MODE_OFF)
     }
 
-    private fun turnOn() : Boolean {
-        // Show warning if module not supported
-        if (!mModuleManager.isSupported()) {
-            Toast.makeText(applicationContext, R.string.toast_module_not_supported, Toast.LENGTH_LONG).show()
+    private fun start(): Boolean {
+        // Exit if we don't have permission for the module
+        if (!mModuleManager.checkPermissions(RC_MODULE_PERMISSIONS, this)) return false
 
-            // Stop if was started
-            if (mModuleManager.isAvailable()) {
-                mModuleManager.stop();
-            }
+        // Exit if we don't have permission for sound strobe mode
+        if (mPreferences.mode == ModeBase.MODE_SOUND_STROBE &&
+                !SoundStrobeMode.checkPermissions(RC_MODE_PERMISSIONS, this)) return false
 
-        } else {
+        // Start activity for screen module
+        if (mPreferences.module == ModuleBase.MODULE_SCREEN) {
 
-            // Exit if we don't have permission for the module
-            if (!mModuleManager.checkPermissions(RC_MODULE_PERMISSIONS, this)) return false
-
-            // Exit if we don't have permission for sound strobe mode
-            if (mPreferences.mode == ModeBase.MODE_SOUND_STROBE &&
-                    !SoundStrobeMode.checkPermissions(RC_MODE_PERMISSIONS, this)) return false
-
-            ModeService.setMode(this, mPreferences.mode)
-
-            return true
+            // Start activity
+            val intent = Intent(this@MainActivity, ScreenModuleActivity::class.java)
+            startActivity(intent)
         }
 
-        return false;
+        ModeService.setMode(this, mPreferences.mode)
+
+        return true
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
@@ -261,7 +264,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         mPreferences.mode = mode
 
         // Start new mode
-        if (mModuleManager.isRunning()) turnOn()
+        if (mModuleManager.isRunning()) start()
     }
 
     override fun onBackPressed() {
@@ -278,7 +281,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
 
         if (requestCode == RC_MODULE_PERMISSIONS || requestCode == RC_MODE_PERMISSIONS) {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                turnOn();
+                start()
             } else if (mModuleManager.isRunning()) {
                 ModeService.setMode(this, ModeBase.MODE_OFF)
             }
@@ -288,15 +291,15 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        if(intent != null && intent.getBooleanExtra(EXTRA_FINISH, false)) {
-            finish();
+        if (intent != null && intent.getBooleanExtra(EXTRA_FINISH, false)) {
+            finish()
         }
     }
 
     companion object {
-        private const val RC_MODULE_PERMISSIONS = 0;
-        private const val RC_MODE_PERMISSIONS = 1;
+        private const val RC_MODULE_PERMISSIONS = 0
+        private const val RC_MODE_PERMISSIONS = 1
 
-        const val EXTRA_FINISH = "extra_finish";
+        const val EXTRA_FINISH = "extra_finish"
     }
 }

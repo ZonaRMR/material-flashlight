@@ -21,38 +21,32 @@ class FlashModule(context: Context) : ModuleBase(context) {
     private var mCamera: Camera ? = null
     private var mPreviewTexture: SurfaceTexture ? = null
 
-    // Used to detect if camera has released because release sometimes take a while
-    private var mIsReleasing = false;
-
     override fun start() {
-        if(mIsReleasing) return;
 
-        mCamera = rearCamera();
+        mCamera = rearCamera()
 
         // Turn off flash by default
         if (isAvailable()) {
             turnOff()
 
             // We should keep refrence for texture to save from GC
-            mPreviewTexture = SurfaceTexture(0);
+            mPreviewTexture = SurfaceTexture(0)
 
             // Hack for some android versions
             try {
-                mCamera!!.setPreviewTexture(mPreviewTexture);
+                mCamera!!.setPreviewTexture(mPreviewTexture)
             } catch (e: IOException) {
-                Timber.e("Can't set preview texture");
+                Timber.e("Can't set preview texture")
             }
         }
     }
 
     override fun stop() {
-        if(mIsReleasing) return;
 
-        mIsReleasing = true;
         mCamera!!.release()
-        mCamera = null;
-        mPreviewTexture = null;
-        mIsReleasing = false;
+        mCamera = null
+        mPreviewTexture = null
+
     }
 
     override fun turnOn() {
@@ -71,7 +65,6 @@ class FlashModule(context: Context) : ModuleBase(context) {
     }
 
     override fun turnOff() {
-        if(mIsReleasing) return;
 
         val params = mCamera!!.parameters
         params.flashMode = Camera.Parameters.FLASH_MODE_OFF
@@ -80,18 +73,34 @@ class FlashModule(context: Context) : ModuleBase(context) {
     }
 
     override fun isAvailable(): Boolean {
-        return mCamera != null
+        try {
+            if (mCamera != null) {
+                // Try to get parameters to check if instance is available
+                mCamera?.parameters
+
+                return true
+            }
+        } catch(e: Exception) {
+            Timber.e("Camera instance not available", e)
+        }
+
+        // Reset camera instance if not available
+        mCamera = null
+
+        return false
     }
 
     override fun isSupported(): Boolean {
         // If flash supported by camera
         if (isAvailable()) {
             val flashModes = mCamera!!.parameters.supportedFlashModes
-            return isParameterSupported(Camera.Parameters.FLASH_MODE_TORCH, flashModes) || isParameterSupported(Camera.Parameters.FLASH_MODE_ON, flashModes)
+            return isParameterSupported(Camera.Parameters.FLASH_MODE_TORCH, flashModes) ||
+                    isParameterSupported(Camera.Parameters.FLASH_MODE_ON, flashModes)
         }
-        // If flash supported by devices
+        // Return true and will check by flash modes
+        // because hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH) do not work correctly
         else {
-            return context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
+            return true
         }
     }
 
@@ -126,7 +135,7 @@ class FlashModule(context: Context) : ModuleBase(context) {
         try {
             cameraResult = Camera.open(cameraId)
         } catch (e: Exception) {
-            Timber.e(e, "Exception in takePhoto when open camera %d", cameraId)
+            Timber.e(e, "Exception when open camera %d", cameraId)
         }
 
         return cameraResult
@@ -140,11 +149,11 @@ class FlashModule(context: Context) : ModuleBase(context) {
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), requestCode);
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), requestCode)
 
-            return false;
+            return false
         }
 
-        return true;
+        return true
     }
 }
