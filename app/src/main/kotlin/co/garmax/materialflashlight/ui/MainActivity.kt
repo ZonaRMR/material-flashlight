@@ -26,6 +26,7 @@ import co.garmax.materialflashlight.modules.FlashModule
 import co.garmax.materialflashlight.modules.ModuleBase
 import co.garmax.materialflashlight.modules.ModuleManager
 import co.garmax.materialflashlight.modules.ScreenModule
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener,
@@ -194,6 +195,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
 
         if (isRunning) {
             mModuleManager.stop()
+            //TODO stop modes internally by manager listener
         }
 
         mPreferences.module = module
@@ -215,22 +217,27 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     }
 
     private fun start(): Boolean {
+        val mode = mPreferences.mode
+        val module = mPreferences.module
+
         // Exit if we don't have permission for the module
         if (!mModuleManager.checkPermissions(RC_MODULE_PERMISSIONS, this)) return false
 
         // Exit if we don't have permission for sound strobe mode
-        if (mPreferences.mode == ModeBase.MODE_SOUND_STROBE &&
+        if (mode == ModeBase.MODE_SOUND_STROBE &&
                 !SoundStrobeMode.checkPermissions(RC_MODE_PERMISSIONS, this)) return false
 
         // Start activity for screen module
-        if (mPreferences.module == ModuleBase.MODULE_SCREEN) {
+        if (module == ModuleBase.MODULE_SCREEN) {
 
             // Start activity
             val intent = Intent(this@MainActivity, ScreenModuleActivity::class.java)
             startActivity(intent)
         }
 
-        ModeService.setMode(this, mPreferences.mode)
+        Timber.d("Started mode %s; module %s", mode, module)
+
+        ModeService.setMode(this, mode)
 
         return true
     }
@@ -263,7 +270,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     private fun changeMode(mode: Int) {
         mPreferences.mode = mode
 
-        // Start new mode
+        // Start new mode if in runnig state
         if (mModuleManager.isRunning()) start()
     }
 

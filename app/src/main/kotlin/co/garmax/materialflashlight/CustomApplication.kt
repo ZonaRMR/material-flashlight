@@ -18,6 +18,7 @@ class CustomApplication : Application() {
                 .contextModule(ContextModule(applicationContext))
                 .build();
 
+        Timber.tag("garmax")
         Timber.plant(Timber.DebugTree());
     }
 }
