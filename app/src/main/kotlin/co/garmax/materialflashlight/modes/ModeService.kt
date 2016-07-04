@@ -27,6 +27,7 @@ class ModeService : Service() {
         super.onCreate()
 
         (application as CustomApplication).applicationComponent.inject(this)
+
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -48,6 +49,12 @@ class ModeService : Service() {
 
             } else {
                 startForeground()
+
+                // Stop previous mode
+                if(mCurrentMode != null) {
+                    mCurrentMode?.stop()
+                    mCurrentMode = null
+                }
 
                 // Start module
                 if (!mModuleManager.isRunning()) {
@@ -73,10 +80,6 @@ class ModeService : Service() {
                         return
                     }
                 }
-                // Stop previous mode
-                else {
-                    mCurrentMode?.stop()
-                }
 
                 // Start new module
                 if (mode == ModeBase.MODE_TORCH) {
@@ -96,10 +99,12 @@ class ModeService : Service() {
 
     private fun stop() {
 
-        mCurrentMode?.stop()
+        if(mCurrentMode != null) {
+            mCurrentMode?.stop()
+            mCurrentMode = null
+        }
 
         if (mModuleManager.isRunning()) {
-            mModuleManager.turnOff()
             mModuleManager.stop()
         }
 

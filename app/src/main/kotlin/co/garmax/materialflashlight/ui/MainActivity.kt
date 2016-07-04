@@ -195,7 +195,6 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
 
         if (isRunning) {
             mModuleManager.stop()
-            //TODO stop modes internally by manager listener
         }
 
         mPreferences.module = module
@@ -213,6 +212,9 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     }
 
     private fun stop() {
+
+        if (mModuleManager.isRunning()) mModuleManager.stop()
+
         ModeService.setMode(this, ModeBase.MODE_OFF)
     }
 
@@ -270,7 +272,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     private fun changeMode(mode: Int) {
         mPreferences.mode = mode
 
-        // Start new mode if in runnig state
+        // Start new mode if in running state
         if (mModuleManager.isRunning()) start()
     }
 

@@ -78,6 +78,9 @@ class ModuleManager {
         // Exit if in transition state
         if(mIsProcessing) return;
 
+        // Turn off light
+        turnOff()
+
         mIsProcessing = true
 
         mIsRunning = false
