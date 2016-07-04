@@ -6,10 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.support.v7.app.NotificationCompat
-import android.widget.Toast
 import co.garmax.materialflashlight.CustomApplication
 import co.garmax.materialflashlight.R
 import co.garmax.materialflashlight.modules.ModuleManager
+import timber.log.Timber
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
 
@@ -27,6 +27,7 @@ class ModeService : Service() {
         super.onCreate()
 
         (application as CustomApplication).applicationComponent.inject(this)
+
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -39,7 +40,7 @@ class ModeService : Service() {
         val mode = intent.getIntExtra(EXTRA_MODE, ModeBase.MODE_OFF)
 
         // Execute on background thread
-        mExecutorService.execute(fun () {
+        mExecutorService.execute(fun() {
 
             // Handle mode
             if (mode == ModeBase.MODE_OFF) {
@@ -49,20 +50,35 @@ class ModeService : Service() {
             } else {
                 startForeground()
 
+                // Stop previous mode
+                if(mCurrentMode != null) {
+                    mCurrentMode?.stop()
+                    mCurrentMode = null
+                }
+
                 // Start module
                 if (!mModuleManager.isRunning()) {
                     mModuleManager.start()
 
-                    // Show error if module not available now
-                    if (!mModuleManager.isAvailable()) {
-                        Toast.makeText(applicationContext, R.string.toast_module_not_available, Toast.LENGTH_LONG).show()
+                    // Show warning if module not supported
+                    if (!mModuleManager.isSupported()) {
+
+                        Timber.e(getString(R.string.toast_module_not_supported))
+
+                        mModuleManager.stop()
 
                         return
                     }
-                }
-                // Stop previous mode
-                else {
-                    mCurrentMode?.stop()
+
+                    // Show error if module not available now
+                    if (!mModuleManager.isAvailable()) {
+
+                        Timber.e(getString(R.string.toast_module_not_available))
+
+                        mModuleManager.stop()
+
+                        return
+                    }
                 }
 
                 // Start new module
@@ -83,9 +99,14 @@ class ModeService : Service() {
 
     private fun stop() {
 
-        mCurrentMode?.stop()
+        if(mCurrentMode != null) {
+            mCurrentMode?.stop()
+            mCurrentMode = null
+        }
 
-        if(mModuleManager.isRunning()) mModuleManager.stop()
+        if (mModuleManager.isRunning()) {
+            mModuleManager.stop()
+        }
 
         stopForeground(true)
         stopSelf()
@@ -137,7 +158,7 @@ class ModeService : Service() {
             val intent = Intent(context, ModeService::class.java)
             intent.putExtra(EXTRA_MODE, mode)
 
-            return intent;
+            return intent
         }
     }
 }

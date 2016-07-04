@@ -28,9 +28,9 @@ class SoundStrobeMode(moduleManager: ModuleManager) : ModeBase(moduleManager) {
         mHandlerThread = HandlerThread(THREAD_NAME)
 
         mBufferSize = AudioRecord.getMinBufferSize(8000, AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT);
+                AudioFormat.ENCODING_PCM_16BIT)
         mAudioRecord = AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT, mBufferSize);
+                AudioFormat.ENCODING_PCM_16BIT, mBufferSize)
     }
 
     private val mStrobeTask = object : Runnable {
@@ -42,7 +42,7 @@ class SoundStrobeMode(moduleManager: ModuleManager) : ModeBase(moduleManager) {
         override fun run() {
             // Do not run task if stopped
             if(!isStopped) {
-                moduleManager.setBrightnessVolume(amplitudePercentage(getAmplitude()));
+                moduleManager.setBrightnessVolume(amplitudePercentage(getAmplitude()))
 
                 mHandler!!.postDelayed(this, CHECK_AMPLITUDE_PERIOD)
             }
@@ -50,14 +50,14 @@ class SoundStrobeMode(moduleManager: ModuleManager) : ModeBase(moduleManager) {
 
         private fun getAmplitude(): Int {
             val buffer = ShortArray(mBufferSize)
-            mAudioRecord.read(buffer, 0, mBufferSize);
+            mAudioRecord.read(buffer, 0, mBufferSize)
             var max: Short = 0
             for (s in buffer) {
                 if (s > max) {
-                    max = s;
+                    max = s
                 }
             }
-            return max.toInt();
+            return max.toInt()
         }
 
         private fun amplitudePercentage(curAmplitude: Int): Int {
@@ -73,7 +73,7 @@ class SoundStrobeMode(moduleManager: ModuleManager) : ModeBase(moduleManager) {
 
             // If min and max equal, exit to prevent dividing by zero
             if(mMinAmplitude == mMaxAmplitude) {
-                return 0;
+                return 0
             }
 
             // Calculate percentage of current amplitude of difference max and min amplitude
@@ -83,43 +83,43 @@ class SoundStrobeMode(moduleManager: ModuleManager) : ModeBase(moduleManager) {
             Timber.d("Sound amplitude min: %d, max: %d, cur: %d; avg: %d", mMinAmplitude, mMaxAmplitude,
                     curAmplitude, avgAmplitude)
 
-            return avgAmplitude;
+            return avgAmplitude
         }
     }
 
     override fun start() {
-        mAudioRecord.startRecording();
+        mAudioRecord.startRecording()
         mHandlerThread.start()
-        mHandler = Handler(mHandlerThread.looper);
+        mHandler = Handler(mHandlerThread.looper)
         Process.setThreadPriority(mHandlerThread.threadId,
                 Process.THREAD_PRIORITY_BACKGROUND)
         mHandler!!.postDelayed(mStrobeTask, CHECK_AMPLITUDE_PERIOD)
     }
 
     override fun stop() {
-        mAudioRecord.stop();
+        mAudioRecord.stop()
         mStrobeTask.isStopped = true
         mHandler!!.removeCallbacks(mStrobeTask)
         mHandlerThread.quit()
     }
 
     companion object {
-        private const val THREAD_NAME = "SoundStrobeThread";
+        private const val THREAD_NAME = "SoundStrobeThread"
         // Period we read amplitude
-        private const val CHECK_AMPLITUDE_PERIOD = 50L;
-        private const val INCREASE_STEP = 150;
-        private const val MAX_AMPLITUDE = 32767;
+        private const val CHECK_AMPLITUDE_PERIOD = 50L
+        private const val INCREASE_STEP = 150
+        private const val MAX_AMPLITUDE = 32767
 
         fun checkPermissions(requestCode: Int, activity: Activity): Boolean {
             if (ContextCompat.checkSelfPermission(activity,
                     Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
 
-                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.RECORD_AUDIO), requestCode);
+                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.RECORD_AUDIO), requestCode)
 
-                return false;
+                return false
             }
 
-            return true;
+            return true
         }
     }
 }

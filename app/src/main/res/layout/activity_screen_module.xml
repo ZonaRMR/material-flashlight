@@ -7,11 +7,24 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.ScreenModuleActivity">
 
-    <FrameLayout
-        android:id="@+id/layout_content"
+    <io.codetail.widget.RevealFrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"/>
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/layout_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/windowBackground">
+
+            <FrameLayout
+                android:id="@+id/layout_light"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white" />
+        </FrameLayout>
+
+    </io.codetail.widget.RevealFrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
