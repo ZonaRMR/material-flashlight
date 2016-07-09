@@ -9,6 +9,7 @@ import android.support.v7.app.NotificationCompat
 import co.garmax.materialflashlight.CustomApplication
 import co.garmax.materialflashlight.R
 import co.garmax.materialflashlight.modules.ModuleManager
+import co.garmax.materialflashlight.appwidgets.WidgetProviderButton
 import timber.log.Timber
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
@@ -92,6 +93,9 @@ class ModeService : Service() {
 
                 mCurrentMode!!.start()
             }
+
+            // Update widgets
+            WidgetProviderButton.updateWidgets(this)
         })
 
         return super.onStartCommand(intent, flags, startId)
