@@ -3,7 +3,6 @@ package co.garmax.materialflashlight.appwidgets
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,6 +12,7 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.AppCompatDrawableManager
 import android.widget.RemoteViews
 import co.garmax.materialflashlight.CustomApplication
+import co.garmax.materialflashlight.LightController
 import co.garmax.materialflashlight.Preferences
 import co.garmax.materialflashlight.R
 import co.garmax.materialflashlight.modes.ModeBase
@@ -22,6 +22,10 @@ import javax.inject.Inject
 
 open class WidgetProviderButton : AppWidgetProvider() {
 
+    protected val ACTION_WIDGET_BUTTON_CLICK = "co.garmax.materialflashlight.action.WIDGET_BUTTON_CLICK"
+
+    @Inject
+    lateinit var mLightController: LightController
     @Inject
     lateinit var mModuleManager: ModuleManager
     @Inject
@@ -42,13 +46,14 @@ open class WidgetProviderButton : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, R.layout.view_widget_button)
 
             // Set on intent to handle onclick
-            views.setOnClickPendingIntent(R.id.image_widget, getPendingSelfIntent(context))
+            views.setOnClickPendingIntent(R.id.button_widget, getPendingSelfIntent(context,
+                    ACTION_WIDGET_BUTTON_CLICK))
 
             // Set image according to current state
             if (mModuleManager.isRunning()) {
-                setWidgetImage(context, views, R.id.image_widget, R.drawable.ic_widget_button_on)
+                setWidgetImage(context, views, R.id.button_widget, R.drawable.ic_widget_button_on)
             } else {
-                setWidgetImage(context, views, R.id.image_widget, R.drawable.ic_widget_button_off)
+                setWidgetImage(context, views, R.id.button_widget, R.drawable.ic_widget_button_off)
             }
 
             // Tell the AppWidgetManager to perform an update on the current app widget
@@ -56,14 +61,14 @@ open class WidgetProviderButton : AppWidgetProvider() {
         }
     }
 
-    private fun getPendingSelfIntent(context: Context): PendingIntent {
+    protected fun getPendingSelfIntent(context: Context, action: String): PendingIntent {
         // An explicit intent directed at the current class (the "self").
         val intent = Intent(context, javaClass)
-        intent.action = ACTION_WIDGET_CLICK
+        intent.action = action
         return PendingIntent.getBroadcast(context, 0, intent, 0)
     }
 
-    private fun setWidgetImage(context: Context, remoteViews: RemoteViews, viewRes: Int, imageRes: Int) {
+    protected fun setWidgetImage(context: Context, remoteViews: RemoteViews, viewRes: Int, imageRes: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             remoteViews.setImageViewResource(viewRes, imageRes)
         } else {
@@ -87,34 +92,22 @@ open class WidgetProviderButton : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
 
-        if (ACTION_WIDGET_CLICK.equals(intent?.action) && context != null) {
+        if(context == null) return
 
-            (context.applicationContext as CustomApplication).applicationComponent.inject(this)
+        (context.applicationContext as CustomApplication).applicationComponent.inject(this)
+
+        if (ACTION_WIDGET_BUTTON_CLICK.equals(intent?.action)) {
 
             if (mModuleManager.isRunning()) {
-                ModeService.setMode(context, ModeBase.MODE_OFF)
+
+                mLightController.stop();
+
             } else {
-                ModeService.setMode(context, mPreferences.mode)
+
+                mLightController.start();
+
             }
         }
     }
 
-    companion object {
-
-        private val ACTION_WIDGET_CLICK = "co.garmax.materialflashlight.action.WIDGET_CLICK"
-
-        /**
-         * Update all widgets if state changed
-         */
-        fun updateWidgets(context: Context) {
-            val intent = Intent(context, WidgetProviderButton::class.java)
-            intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-
-            val ids = AppWidgetManager.getInstance(context).
-                    getAppWidgetIds(ComponentName(context, WidgetProviderButton::class.java))
-
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
-            context.sendBroadcast(intent)
-        }
-    }
 }

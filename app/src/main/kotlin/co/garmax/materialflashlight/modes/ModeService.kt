@@ -9,7 +9,6 @@ import android.support.v7.app.NotificationCompat
 import co.garmax.materialflashlight.CustomApplication
 import co.garmax.materialflashlight.R
 import co.garmax.materialflashlight.modules.ModuleManager
-import co.garmax.materialflashlight.appwidgets.WidgetProviderButton
 import timber.log.Timber
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
@@ -63,7 +62,7 @@ class ModeService : Service() {
 
                     // Show warning if module not supported
                     if (!mModuleManager.isSupported()) {
-
+//TODO show toast without UI
                         Timber.e(getString(R.string.toast_module_not_supported))
 
                         mModuleManager.stop()
@@ -73,7 +72,7 @@ class ModeService : Service() {
 
                     // Show error if module not available now
                     if (!mModuleManager.isAvailable()) {
-
+//TODO show toast without UI
                         Timber.e(getString(R.string.toast_module_not_available))
 
                         mModuleManager.stop()
@@ -95,7 +94,7 @@ class ModeService : Service() {
             }
 
             // Update widgets
-            WidgetProviderButton.updateWidgets(this)
+            (application as CustomApplication).updateWidgets()
         })
 
         return super.onStartCommand(intent, flags, startId)

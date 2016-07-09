@@ -19,6 +19,8 @@
     <string name="notification_tap_to_turn_off">Tap to turn off</string>
 
     <string name="content_description_toggle_light">Toggle light</string>
+    <string name="content_description_module_flash">Module flashlight</string>
+    <string name="content_description_module_screen">Module screen</string>
 
     <string name="warning_another_app_use_flash">Another application is using camera\'s flash</string>
 </resources>

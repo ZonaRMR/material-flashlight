@@ -4,11 +4,13 @@
     android:layout_height="match_parent"
     android:padding="@dimen/margin_normal">
 
-    <ImageView
-        android:id="@+id/image_widget"
+    <ImageButton
+        android:id="@+id/button_widget"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@null"
         android:layout_gravity="center"
-        android:scaleType="fitCenter"
-        android:contentDescription="@string/content_description_toggle_light"/>
+        android:contentDescription="@string/content_description_toggle_light"
+        android:scaleType="fitCenter" />
+
 </FrameLayout>
