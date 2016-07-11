@@ -1,13 +1,12 @@
 package co.garmax.materialflashlight.modules
 
-import android.app.Activity
 import android.content.Context
 
 abstract class ModuleBase(var context: Context) {
 
     init {
         // Use only app context to prevent link for activity
-        context = context.applicationContext;
+        context = context.applicationContext
     }
 
     /**
@@ -49,7 +48,7 @@ abstract class ModuleBase(var context: Context) {
      * Check if module request runtime permissions and call permissions dialog if needed
      * Return true if permission do not required otherwise false
      */
-    abstract fun checkPermissions(requestCode: Int, activity: Activity) : Boolean
+    abstract fun checkPermissions() : Boolean
 
     companion object {
         const val MODULE_SCREEN = 0

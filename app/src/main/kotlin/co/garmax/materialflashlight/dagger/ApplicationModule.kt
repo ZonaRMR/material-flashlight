@@ -1,6 +1,7 @@
 package co.garmax.materialflashlight.dagger
 
 import android.content.Context
+import co.garmax.materialflashlight.LightController
 import co.garmax.materialflashlight.Preferences
 import co.garmax.materialflashlight.modules.FlashModule
 import co.garmax.materialflashlight.modules.ModuleBase
@@ -13,6 +14,13 @@ import java.util.concurrent.Executors
 import javax.inject.Singleton
 
 @Module class ApplicationModule() {
+
+    @Provides @Singleton
+    fun provideLightController(context: Context, moduleManager: ModuleManager,
+                               preferences: Preferences): LightController {
+
+        return LightController(context, moduleManager, preferences);
+    }
 
     @Provides @Singleton
     fun provideModuleManager(context: Context, preferences: Preferences): ModuleManager {

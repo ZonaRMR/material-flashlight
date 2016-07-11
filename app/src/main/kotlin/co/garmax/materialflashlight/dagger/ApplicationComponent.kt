@@ -3,6 +3,9 @@ package co.garmax.materialflashlight.dagger
 import co.garmax.materialflashlight.modes.ModeService
 import co.garmax.materialflashlight.ui.MainActivity
 import co.garmax.materialflashlight.ui.ScreenModuleActivity
+import co.garmax.materialflashlight.appwidgets.WidgetProviderButton
+import co.garmax.materialflashlight.appwidgets.WidgetProviderButtonModules
+import co.garmax.materialflashlight.ui.PermissionsActivity
 import dagger.Component
 import javax.inject.Singleton
 
@@ -12,4 +15,7 @@ interface ApplicationComponent {
     fun inject(mainActivity: MainActivity)
     fun inject(customService: ModeService)
     fun inject(screenModuleActivity: ScreenModuleActivity)
+    fun inject(permissionActivity: PermissionsActivity)
+    fun inject(widgetProvider: WidgetProviderButton)
+    fun inject(widgetProvider: WidgetProviderButtonModules)
 }

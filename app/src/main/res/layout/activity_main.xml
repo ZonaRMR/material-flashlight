@@ -60,7 +60,7 @@
                     android:clickable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/text_margin">
+                    android:padding="@dimen/margin_large">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -71,8 +71,8 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/text_margin"
-                        android:layout_marginRight="@dimen/text_margin"
+                        android:layout_marginLeft="@dimen/margin_large"
+                        android:layout_marginRight="@dimen/margin_large"
                         android:layout_weight="1"
                         android:text="@string/text_keep_screen_on"
                         android:textColor="@color/colorPrimaryText" />
@@ -92,7 +92,7 @@
                     android:clickable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/text_margin">
+                    android:padding="@dimen/margin_large">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -103,8 +103,8 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/text_margin"
-                        android:layout_marginRight="@dimen/text_margin"
+                        android:layout_marginLeft="@dimen/margin_large"
+                        android:layout_marginRight="@dimen/margin_large"
                         android:layout_weight="1"
                         android:text="@string/text_auto_turn_on"
                         android:textColor="@color/colorPrimaryText" />
@@ -126,7 +126,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:padding="@dimen/text_margin"
+                        android:padding="@dimen/margin_large"
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
@@ -138,8 +138,8 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_margin"
-                            android:layout_marginRight="@dimen/text_margin"
+                            android:layout_marginLeft="@dimen/margin_large"
+                            android:layout_marginRight="@dimen/margin_large"
                             android:layout_weight="1"
                             android:text="@string/text_modules"
                             android:textColor="@color/colorPrimaryText" />
@@ -149,24 +149,24 @@
                     <RadioGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/text_margin"
-                        android:layout_marginLeft="@dimen/text_margin"
-                        android:layout_marginStart="@dimen/text_margin">
+                        android:layout_marginBottom="@dimen/margin_large"
+                        android:layout_marginLeft="@dimen/margin_large"
+                        android:layout_marginStart="@dimen/margin_large">
 
                         <RadioButton
                             android:id="@+id/radio_camera_flashlight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_margin"
-                            android:layout_marginStart="@dimen/text_margin"
+                            android:layout_marginLeft="@dimen/margin_large"
+                            android:layout_marginStart="@dimen/margin_large"
                             android:text="@string/text_camera_flashlight" />
 
                         <RadioButton
                             android:id="@+id/radio_screen"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_margin"
-                            android:layout_marginStart="@dimen/text_margin"
+                            android:layout_marginLeft="@dimen/margin_large"
+                            android:layout_marginStart="@dimen/margin_large"
                             android:checked="true"
                             android:text="@string/text_screen" />
 
@@ -183,7 +183,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:padding="@dimen/text_margin"
+                        android:padding="@dimen/margin_large"
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
@@ -195,8 +195,8 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_margin"
-                            android:layout_marginRight="@dimen/text_margin"
+                            android:layout_marginLeft="@dimen/margin_large"
+                            android:layout_marginRight="@dimen/margin_large"
                             android:layout_weight="1"
                             android:text="@string/text_modes"
                             android:textColor="@color/colorPrimaryText" />
@@ -206,24 +206,24 @@
                     <RadioGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/text_margin"
-                        android:layout_marginLeft="@dimen/text_margin"
-                        android:layout_marginStart="@dimen/text_margin">
+                        android:layout_marginBottom="@dimen/margin_large"
+                        android:layout_marginLeft="@dimen/margin_large"
+                        android:layout_marginStart="@dimen/margin_large">
 
                         <RadioButton
                             android:id="@+id/radio_torch"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_margin"
-                            android:layout_marginStart="@dimen/text_margin"
+                            android:layout_marginLeft="@dimen/margin_large"
+                            android:layout_marginStart="@dimen/margin_large"
                             android:text="@string/text_torch" />
 
                         <RadioButton
                             android:id="@+id/radio_interval_strobe"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_margin"
-                            android:layout_marginStart="@dimen/text_margin"
+                            android:layout_marginLeft="@dimen/margin_large"
+                            android:layout_marginStart="@dimen/margin_large"
                             android:checked="true"
                             android:text="@string/text_interval_strobe" />
 
@@ -231,8 +231,8 @@
                             android:id="@+id/radio_sound_strobe"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_margin"
-                            android:layout_marginStart="@dimen/text_margin"
+                            android:layout_marginLeft="@dimen/margin_large"
+                            android:layout_marginStart="@dimen/margin_large"
                             android:text="@string/text_sound_strobe" />
                     </RadioGroup>
                 </LinearLayout>
@@ -242,7 +242,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="@dimen/text_margin"
+                    android:layout_margin="@dimen/margin_large"
                     android:textColor="@color/colorSecondaryText" />
 
             </LinearLayout>
@@ -254,7 +254,7 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_margin="@dimen/margin_large"
         app:fabSize="normal"
         app:layout_anchor="@id/layout_content"
         app:layout_anchorGravity="bottom|end"
