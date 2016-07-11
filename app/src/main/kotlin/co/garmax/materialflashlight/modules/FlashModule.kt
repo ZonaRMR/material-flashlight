@@ -3,14 +3,12 @@
 package co.garmax.materialflashlight.modules
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.SurfaceTexture
 import android.hardware.Camera
-import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-
+import co.garmax.materialflashlight.ui.PermissionsActivity
 import timber.log.Timber
 import java.io.IOException
 
@@ -145,11 +143,13 @@ class FlashModule(context: Context) : ModuleBase(context) {
         return supported != null && supported.indexOf(value) >= 0
     }
 
-    override fun checkPermissions(requestCode: Int, activity: Activity): Boolean {
+    override fun checkPermissions(): Boolean {
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), requestCode)
+            PermissionsActivity.startActivity(context,
+                    arrayOf(Manifest.permission.CAMERA),
+                    PermissionsActivity.RC_START_LIGHT)
 
             return false
         }

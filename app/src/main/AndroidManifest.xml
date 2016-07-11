@@ -31,11 +31,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.ScreenModuleActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTask"/>
+
+        <activity
+            android:name=".ui.PermissionsActivity"
+            android:theme="@style/AppTransparentTheme" />
+
         <service android:name=".modes.ModeService" />
+
+        <receiver android:name=".appwidgets.WidgetProviderButton" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_button" />
+        </receiver>
+
+        <receiver android:name=".appwidgets.WidgetProviderButtonModules" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_button_modules" />
+        </receiver>
     </application>
 
 </manifest>

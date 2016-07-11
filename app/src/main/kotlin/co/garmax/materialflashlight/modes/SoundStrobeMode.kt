@@ -1,7 +1,7 @@
 package co.garmax.materialflashlight.modes
 
 import android.Manifest
-import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -9,9 +9,9 @@ import android.media.MediaRecorder
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Process
-import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import co.garmax.materialflashlight.modules.ModuleManager
+import co.garmax.materialflashlight.ui.PermissionsActivity
 import timber.log.Timber
 
 /**
@@ -110,11 +110,13 @@ class SoundStrobeMode(moduleManager: ModuleManager) : ModeBase(moduleManager) {
         private const val INCREASE_STEP = 150
         private const val MAX_AMPLITUDE = 32767
 
-        fun checkPermissions(requestCode: Int, activity: Activity): Boolean {
-            if (ContextCompat.checkSelfPermission(activity,
+        fun checkPermissions(context: Context): Boolean {
+            if (ContextCompat.checkSelfPermission(context,
                     Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
 
-                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.RECORD_AUDIO), requestCode)
+                PermissionsActivity.startActivity(context,
+                        arrayOf(Manifest.permission.RECORD_AUDIO),
+                        PermissionsActivity.RC_CHECK_PERMISSION)
 
                 return false
             }

@@ -1,6 +1,5 @@
 package co.garmax.materialflashlight.modules
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -10,7 +9,6 @@ import android.support.v4.content.LocalBroadcastManager
 /**
  * Module for device screen
  */
-
 class ScreenModule(context: Context) : ModuleBase(context) {
 
     var mPreviousScreenBrightness: Int = 0
@@ -62,11 +60,12 @@ class ScreenModule(context: Context) : ModuleBase(context) {
                 Settings.System.SCREEN_BRIGHTNESS_MODE, mPreviousBrightnessMode)
     }
 
-    override fun checkPermissions(requestCode: Int, activity: Activity): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.System.canWrite(activity)) {
+    override fun checkPermissions(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.System.canWrite(context)) {
 
             val grantIntent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
-            activity.startActivity(grantIntent)
+            grantIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(grantIntent)
 
             return false
         }

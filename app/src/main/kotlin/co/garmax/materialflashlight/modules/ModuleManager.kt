@@ -1,6 +1,5 @@
 package co.garmax.materialflashlight.modules
 
-import android.app.Activity
 import timber.log.Timber
 import java.util.*
 
@@ -26,7 +25,7 @@ class ModuleManager {
     fun turnOff() {
 
         // Exit if in transition state
-        if(mIsProcessing) return;
+        if(mIsProcessing) return
 
         if (!isAvailable()) {
             Timber.w("turnOff() called when module not available")
@@ -38,7 +37,7 @@ class ModuleManager {
 
     fun turnOn() {
         // Exit if in transition state
-        if(mIsProcessing) return;
+        if(mIsProcessing) return
 
         if (!isAvailable()) {
             Timber.w("turnOn() called when module not available")
@@ -51,7 +50,7 @@ class ModuleManager {
     fun start() {
 
         // Exit if in transition state
-        if(mIsProcessing) return;
+        if(mIsProcessing) return
 
         mIsProcessing = true
 
@@ -76,7 +75,7 @@ class ModuleManager {
     fun stop() {
 
         // Exit if in transition state
-        if(mIsProcessing) return;
+        if(mIsProcessing) return
 
         // Turn off light
         turnOff()
@@ -135,7 +134,7 @@ class ModuleManager {
         mOnStateChangedListeners?.remove(onStateChangedListener)
     }
 
-    fun checkPermissions(requestCode: Int, activity: Activity): Boolean {
-        return module!!.checkPermissions(requestCode, activity)
+    fun checkPermissions(): Boolean {
+        return module!!.checkPermissions()
     }
 }
