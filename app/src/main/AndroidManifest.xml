@@ -36,6 +36,11 @@
             android:name=".ui.ScreenModuleActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTask"/>
+
+        <activity
+            android:name=".ui.PermissionsActivity"
+            android:theme="@style/AppTransparentTheme" />
+
         <service android:name=".modes.ModeService" />
 
         <receiver android:name=".appwidgets.WidgetProviderButton" >

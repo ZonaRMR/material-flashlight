@@ -1,7 +1,6 @@
 package co.garmax.materialflashlight.ui
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat
@@ -240,18 +239,6 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == RC_MODULE_PERMISSIONS || requestCode == RC_MODE_PERMISSIONS) {
-            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mLightController.start()
-            } else if (mModuleManager.isRunning()) {
-                ModeService.setMode(this, ModeBase.MODE_OFF)
-            }
-        }
-    }
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
@@ -261,9 +248,6 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     }
 
     companion object {
-        private const val RC_MODULE_PERMISSIONS = 0
-        private const val RC_MODE_PERMISSIONS = 1
-
         const val EXTRA_FINISH = "extra_finish"
     }
 }

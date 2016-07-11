@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import co.garmax.materialflashlight.modes.ModeBase
 import co.garmax.materialflashlight.modes.ModeService
+import co.garmax.materialflashlight.modes.SoundStrobeMode
 import co.garmax.materialflashlight.modules.FlashModule
 import co.garmax.materialflashlight.modules.ModuleBase
 import co.garmax.materialflashlight.modules.ModuleManager
@@ -53,13 +54,13 @@ class LightController(val mContext: Context, val mModuleManager: ModuleManager, 
     fun start(): Boolean {
         val mode = mPreferences.mode
         val module = mPreferences.module
-//TODO implement in separated activity
+
         // Exit if we don't have permission for the module
-       // if (!mModuleManager.checkPermissions(MainActivity.RC_MODULE_PERMISSIONS, mContext)) return false
+        if (!mModuleManager.checkPermissions()) return false
 
         // Exit if we don't have permission for sound strobe mode
-      //  if (mode == ModeBase.MODE_SOUND_STROBE &&
-      //          !SoundStrobeMode.checkPermissions(MainActivity.RC_MODE_PERMISSIONS, mContext)) return false
+        if (mode == ModeBase.MODE_SOUND_STROBE &&
+            !SoundStrobeMode.checkPermissions(mContext)) return false
 
         // Start activity for screen module
         if (module == ModuleBase.MODULE_SCREEN) {

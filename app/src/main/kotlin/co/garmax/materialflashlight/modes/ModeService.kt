@@ -4,12 +4,13 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
 import android.os.IBinder
 import android.support.v7.app.NotificationCompat
+import android.widget.Toast
 import co.garmax.materialflashlight.CustomApplication
 import co.garmax.materialflashlight.R
 import co.garmax.materialflashlight.modules.ModuleManager
-import timber.log.Timber
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
 
@@ -20,6 +21,9 @@ class ModeService : Service() {
 
     private var mCurrentMode: ModeBase? = null
 
+    // Used to show toast in main thread
+    private var mHandler: Handler? = null
+
     @Inject lateinit var mModuleManager: ModuleManager
     @Inject lateinit var mExecutorService: ExecutorService
 
@@ -28,6 +32,7 @@ class ModeService : Service() {
 
         (application as CustomApplication).applicationComponent.inject(this)
 
+        mHandler = Handler()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -51,7 +56,7 @@ class ModeService : Service() {
                 startForeground()
 
                 // Stop previous mode
-                if(mCurrentMode != null) {
+                if (mCurrentMode != null) {
                     mCurrentMode?.stop()
                     mCurrentMode = null
                 }
@@ -62,8 +67,11 @@ class ModeService : Service() {
 
                     // Show warning if module not supported
                     if (!mModuleManager.isSupported()) {
-//TODO show toast without UI
-                        Timber.e(getString(R.string.toast_module_not_supported))
+
+                        mHandler?.post(fun() {
+                            Toast.makeText(applicationContext, R.string.toast_module_not_supported, Toast.LENGTH_LONG).show()
+                        }
+                        )
 
                         mModuleManager.stop()
 
@@ -72,8 +80,11 @@ class ModeService : Service() {
 
                     // Show error if module not available now
                     if (!mModuleManager.isAvailable()) {
-//TODO show toast without UI
-                        Timber.e(getString(R.string.toast_module_not_available))
+
+                        mHandler?.post(fun() {
+                            Toast.makeText(applicationContext, R.string.toast_module_not_available, Toast.LENGTH_LONG).show()
+                        }
+                        )
 
                         mModuleManager.stop()
 
@@ -102,7 +113,7 @@ class ModeService : Service() {
 
     private fun stop() {
 
-        if(mCurrentMode != null) {
+        if (mCurrentMode != null) {
             mCurrentMode?.stop()
             mCurrentMode = null
         }

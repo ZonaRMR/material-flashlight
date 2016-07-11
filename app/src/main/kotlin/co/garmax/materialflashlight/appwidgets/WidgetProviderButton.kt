@@ -15,8 +15,6 @@ import co.garmax.materialflashlight.CustomApplication
 import co.garmax.materialflashlight.LightController
 import co.garmax.materialflashlight.Preferences
 import co.garmax.materialflashlight.R
-import co.garmax.materialflashlight.modes.ModeBase
-import co.garmax.materialflashlight.modes.ModeService
 import co.garmax.materialflashlight.modules.ModuleManager
 import javax.inject.Inject
 
@@ -100,11 +98,11 @@ open class WidgetProviderButton : AppWidgetProvider() {
 
             if (mModuleManager.isRunning()) {
 
-                mLightController.stop();
+                mLightController.stop()
 
             } else {
 
-                mLightController.start();
+                mLightController.start()
 
             }
         }
