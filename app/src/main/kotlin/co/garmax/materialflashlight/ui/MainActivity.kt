@@ -90,14 +90,17 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     private fun setupLayout() {
 
         // Restore settings
+        mSwitchKeepScreenOn.isChecked = mPreferences.isKeepScreenOn
+        mSwitchAutoTurnOn.isChecked = mPreferences.isAutoTurnOn
+
         // Set module
         updateModule()
 
         // Set mode
         updateMode()
 
-        mSwitchKeepScreenOn.isChecked = mPreferences.isKeepScreenOn
-        mSwitchAutoTurnOn.isChecked = mPreferences.isAutoTurnOn
+        // Set keep screen on
+        updateKeepScreenOn()
 
         mRadioSoundStrobe.setOnCheckedChangeListener(this)
         mRadioIntervalStrobe.setOnCheckedChangeListener(this)
@@ -107,6 +110,11 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         mRadioCameraFlashlight.setOnCheckedChangeListener(this)
         mRadioScreen.setOnCheckedChangeListener(this)
         mTextVersion.text = getString(R.string.text_version, BuildConfig.VERSION_NAME)
+    }
+
+    private fun updateKeepScreenOn() {
+
+        mFab.keepScreenOn = mSwitchKeepScreenOn.isChecked
     }
 
     private fun updateModule() {
@@ -202,6 +210,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         when (buttonView.id) {
             R.id.switch_keep_screen_on -> {
                 mPreferences.isKeepScreenOn = isChecked
+                updateKeepScreenOn()
             }
             R.id.switch_auto_turn_on -> {
                 mPreferences.isAutoTurnOn = isChecked
