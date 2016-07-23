@@ -11,7 +11,7 @@ import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
-import butterknife.Bind
+import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import co.garmax.materialflashlight.*
@@ -24,25 +24,25 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener,
         ModuleManager.OnStateChangedListener {
 
-    @Bind(R.id.image_appbar)
+    @BindView(R.id.image_appbar)
     lateinit var mImageAppbar: ImageView
-    @Bind(R.id.switch_keep_screen_on)
+    @BindView(R.id.switch_keep_screen_on)
     lateinit var mSwitchKeepScreenOn: SwitchCompat
-    @Bind(R.id.switch_auto_turn_on)
+    @BindView(R.id.switch_auto_turn_on)
     lateinit var mSwitchAutoTurnOn: SwitchCompat
-    @Bind(R.id.radio_torch)
+    @BindView(R.id.radio_torch)
     lateinit var mRadioTorch: RadioButton
-    @Bind(R.id.radio_interval_strobe)
+    @BindView(R.id.radio_interval_strobe)
     lateinit var mRadioIntervalStrobe: RadioButton
-    @Bind(R.id.radio_sound_strobe)
+    @BindView(R.id.radio_sound_strobe)
     lateinit var mRadioSoundStrobe: RadioButton
-    @Bind(R.id.radio_camera_flashlight)
+    @BindView(R.id.radio_camera_flashlight)
     lateinit var mRadioCameraFlashlight: RadioButton
-    @Bind(R.id.radio_screen)
+    @BindView(R.id.radio_screen)
     lateinit var mRadioScreen: RadioButton
-    @Bind(R.id.fab)
+    @BindView(R.id.fab)
     lateinit var mFab: FloatingActionButton
-    @Bind(R.id.text_version)
+    @BindView(R.id.text_version)
     lateinit var mTextVersion: TextView
 
     @Inject
