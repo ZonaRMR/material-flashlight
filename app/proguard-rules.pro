@@ -22,17 +22,10 @@
 -useuniqueclassmembernames
 
 #### Butterknife
--keep class butterknife.** { *; }
--dontwarn butterknife.internal.**
--keep class **$$ViewBinder { *; }
-
--keepclasseswithmembernames class * {
-    @butterknife.* <fields>;
-}
-
--keepclasseswithmembernames class * {
-    @butterknife.* <methods>;
-}
+-keep public class * implements butterknife.internal.ViewBinder { public <init>(); }
+-keep class butterknife.*
+-keepclasseswithmembernames class * { @butterknife.* <methods>; }
+-keepclasseswithmembernames class * { @butterknife.* <fields>; }
 
 #### Timber
 -dontwarn org.jetbrains.annotations.**

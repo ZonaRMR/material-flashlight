@@ -16,7 +16,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.animation.AccelerateDecelerateInterpolator
-import butterknife.Bind
+import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import co.garmax.materialflashlight.CustomApplication
@@ -33,11 +33,11 @@ import javax.inject.Inject
  */
 class ScreenModuleActivity : AppCompatActivity(), ModuleManager.OnStateChangedListener {
 
-    @Bind(R.id.layout_content)
+    @BindView(R.id.layout_content)
     lateinit var mLayoutContent: View
-    @Bind(R.id.layout_light)
+    @BindView(R.id.layout_light)
     lateinit var mLayoutLight: View
-    @Bind(R.id.fab)
+    @BindView(R.id.fab)
     lateinit var mFab: View
 
     @Inject
