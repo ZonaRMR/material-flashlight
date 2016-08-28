@@ -11,9 +11,10 @@
     <string name="text_version">Версия: %s</string>
     <string name="text_screen">Экран</string>
     <string name="text_camera_flashlight">Вспышка камеры</string>
+    <string name="text_toggle_light">Переключение света</string>
 
-    <string name="toast_module_not_supported">Выбранный модуль не поддерживается на данном устройстве, попробуйте другой.</string>
-    <string name="toast_module_not_available">Выбранный модуль не может быть использован сейчас, попробуйте другой.</string>
+    <string name="toast_module_not_supported">Выбранный модуль не поддерживается на данном устройстве, попробуйте другой модуль.</string>
+    <string name="toast_module_not_available">Выбранный модуль не может быть использован сейчас, попробуйте другой модуль.</string>
 
     <string name="notification_light">Свет включён</string>
     <string name="notification_tap_to_turn_off">Нажмите, что бы отключить</string>

@@ -85,7 +85,10 @@ class ScreenModuleActivity : AppCompatActivity(), ModuleManager.OnStateChangedLi
     override fun stateChanged(isRunning: Boolean) {
 
         // Exit if stopped
-        if (!isRunning) finish()
+        if (!isRunning) {
+            finish()
+            overridePendingTransition(0, 0)
+        }
     }
 
     private fun setupEnterAnimations() {
@@ -205,7 +208,6 @@ class ScreenModuleActivity : AppCompatActivity(), ModuleManager.OnStateChangedLi
 
     @OnClick(R.id.fab)
     fun onFabClick() {
-
         setupExitAnimations()
     }
 
@@ -221,11 +223,10 @@ class ScreenModuleActivity : AppCompatActivity(), ModuleManager.OnStateChangedLi
 
     override fun onBackPressed() {
         // Close main activity
-        // Start activity
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra(MainActivity.EXTRA_FINISH, true)
         startActivity(intent)
-
+        overridePendingTransition(0, 0)
         // Stop service
         ModeService.setMode(this, ModeBase.MODE_OFF)
 
