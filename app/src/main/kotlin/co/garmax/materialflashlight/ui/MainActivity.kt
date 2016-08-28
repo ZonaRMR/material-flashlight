@@ -60,6 +60,11 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
 
+        // Close if flag set
+        if (intent != null && intent.getBooleanExtra(EXTRA_FINISH, false)) {
+            finish()
+        }
+
         (application as CustomApplication).applicationComponent.inject(this)
 
         mAnimatedDrawableDay = AnimatedVectorDrawableCompat.create(this, R.drawable.avc_appbar_day)

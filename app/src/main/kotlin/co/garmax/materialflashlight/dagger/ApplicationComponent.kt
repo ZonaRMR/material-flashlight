@@ -1,5 +1,6 @@
 package co.garmax.materialflashlight.dagger
 
+import co.garmax.materialflashlight.LightTileService
 import co.garmax.materialflashlight.modes.ModeService
 import co.garmax.materialflashlight.ui.MainActivity
 import co.garmax.materialflashlight.ui.ScreenModuleActivity
@@ -18,4 +19,5 @@ interface ApplicationComponent {
     fun inject(permissionActivity: PermissionsActivity)
     fun inject(widgetProvider: WidgetProviderButton)
     fun inject(widgetProvider: WidgetProviderButtonModules)
+    fun inject(tileService: LightTileService)
 }

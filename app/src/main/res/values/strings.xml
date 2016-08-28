@@ -11,9 +11,10 @@
     <string name="text_version">Version: %s</string>
     <string name="text_screen">Screen</string>
     <string name="text_camera_flashlight">Camera Flashlight</string>
+    <string name="text_toggle_light">Toggle light</string>
 
-    <string name="toast_module_not_supported">Selected module is not supported on this device, try another.</string>
-    <string name="toast_module_not_available">Selected module can\'t be used now, try another.</string>
+    <string name="toast_module_not_supported">Selected module is not supported on this device, try another module.</string>
+    <string name="toast_module_not_available">Selected module can\'t be used now, try another module.</string>
 
     <string name="notification_light">The light is on</string>
     <string name="notification_tap_to_turn_off">Tap to turn off</string>
