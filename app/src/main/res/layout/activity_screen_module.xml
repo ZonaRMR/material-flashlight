@@ -1,40 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".ui.ScreenModuleActivity">
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".ui.ScreenModuleActivity">
 
     <io.codetail.widget.RevealFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:id="@+id/layout_reveal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <FrameLayout
-            android:id="@+id/layout_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/windowBackground">
-
-            <FrameLayout
-                android:id="@+id/layout_light"
+                android:id="@+id/layout_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white" />
+                android:background="@color/windowBackground">
+
+            <FrameLayout
+                    android:id="@+id/layout_light"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"/>
         </FrameLayout>
 
     </io.codetail.widget.RevealFrameLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_large"
-        android:keepScreenOn="true"
-        app:fabSize="normal"
-        app:layout_anchor="@id/layout_content"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_power_on" />
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_large"
+            android:keepScreenOn="true"
+            app:fabSize="normal"
+            app:layout_anchor="@id/layout_reveal"
+            app:layout_anchorGravity="bottom|end"
+            app:srcCompat="@drawable/ic_power_on"/>
 
 </android.support.design.widget.CoordinatorLayout>
